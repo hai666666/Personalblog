@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>显示用户</title>
+    <!-- 引入Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 600px;
+        }
+        .card {
+            margin-top: 20px;
+        }
+        .message {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center">用户信息</h2>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>用户ID：</strong> <span th:text="${user.uid}"></span></p>
+            <p><strong>用户名：</strong> <span th:text="${user.username}"></span></p>
+            <p><strong>用户密码：</strong> <span th:text="${user.password}"></span></p>
+
+            <!-- 显示成功消息 -->
+            <div th:if="${message != null}" class="alert alert-success message" th:text="${message}"></div>
+
+            <a class="btn btn-primary" th:href="@{'/modifyuserform/' + ${user.uid}}">修改</a>
+            <a class="btn btn-secondary" href="/">回到首页</a>
+        </div>
+    </div>
+</div>
+
+<!-- 引入Bootstrap JS和依赖 -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

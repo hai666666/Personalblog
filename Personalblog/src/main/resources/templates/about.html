@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--1.引入布局页头部片段,取代原head区块-->
+<head th:replace="~{layout::head(title=~{::title/text()})}">
+    <meta charset="UTF-8">
+    <title>个人博客之我的小屋</title>
+</head>
+<!--头部片段结束-->
+
+<body>
+<!--2.插入布局页-导航栏片段-->
+<div th:insert="~{layout::navbar}"></div>
+<!--导航栏片段结束-->
+
+<!--3.以下是内容区块部份,本页自订-->
+<div class="container">
+    <div class="float-end mt-2">
+        <!--<a class="btn btn-primary btn-sm" th:href="@{/}" href="messages.html"> 全部Message </a>-->
+        <a class="btn btn-primary btn-sm" href="/"> 主页 </a>
+    </div>
+    <hr style="border: 0 ;">
+    <h6 class="float-md-start mt-2" style="color: blue;font-size: 20px;">欢迎来到我的小屋</h6>
+    <div class="clearfix"></div><hr/>
+    <div class="mt-4">
+        <h6>学号：202124111249</h6>
+        <h6>姓名：李嘉杰</h6>
+        <h6>QQ：1609054035</h6>
+        <h6>微信：17806789976</h6>
+    </div>
+</div>
+<!--内容区块结束-->
+
+<!--4.插入布局页-页尾片段-->
+<div th:insert="~{layout::footer}"></div>
+<!--页尾片段结束-->
+</body>
+</html>

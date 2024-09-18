@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout::head(title=~{::title/text()})}">
+  <meta charset="UTF-8">
+  <title>添加和修改文章</title>
+</head>
+<body>
+
+<div th:insert="~{layout::navbar}"></div>
+
+<div class="container">
+    <div class="float-end mt-2">
+        <a class="btn btn-primary btn-sm" href="/"> 全部文章 </a>
+        <a class="btn btn-secondary btn-sm" href="javascript:history.back()">返回</a>
+    </div>
+    <!--显示添加或修改,id是空表新增作业,否则表修改作业-->
+    <h6 th:if="${article.aid eq null}" class="float-md-start mt-2">添加文章</h6>
+    <h6 th:if="${article.aid ne null}" class="float-md-start mt-2">修改文章</h6>
+    <div class="clearfix"></div>
+    <form id="articleForm" th:action="@{/addOrUpdate}" th:object="${article}" action="#" method="post">
+        <!-- 若是新建则没id,若是修改则有id传来 -->
+        <input type="hidden" th:field="*{aid}" th:class="${'form-control'}"/>
+        <div class="form-group">
+            <label for="atitle">标题</label>
+            <input type="text" id="atitle" th:field="*{atitle}" class="form-control" required placeholder="请输入标题"/>
+        </div>
+        <div class="form-group">
+            <label for="content">内容</label>
+            <textarea id="content" th:field="*{content}" class="form-control" required placeholder="请输入内容"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="sid">分类</label>
+            <select id="sid" th:field="*{sid}" class="form-control">
+                <option th:each="sort : ${sortlist}" th:value="${sort.sid}" th:text="${sort.sortname}" th:selected="${(sid ne null) and (sid eq sort.sid)}">ABC</option>
+            </select>
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-primary">提交</button>
+    </form>
+</div> <!-- 内容区块结束 -->
+
+<div th:insert="~{layout::footer}"></div>
+
+</body>
+</html>

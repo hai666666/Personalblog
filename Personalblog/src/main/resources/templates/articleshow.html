@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout::head(title=~{::title/text()})}">
+    <meta charset="UTF-8">
+    <title>文章详情</title>
+</head>
+<body>
+
+<div th:insert="~{layout::navbar}"></div>
+
+
+<div class="container">
+    <hr style="border: 0 ;"> <!-- 这是分割线 -->
+    <h1 style="font-size: 24px;">文章详情</h1>
+    <!-- 显示错误信息 -->
+    <div th:if="${globalArticle}" class="alert alert-danger" th:text="${globalArticle}"></div>
+    <hr style="border: 0 ;"> <!-- 这是分割线 -->
+    <div class="float-end mt-2">
+        <a class="btn btn-primary btn-sm" href="/"> 全部文章 </a>
+        <a class="btn btn-secondary btn-sm" href="javascript:history.back()">返回</a>
+    </div>
+
+    <div>
+        <h2 th:text="'文章标题：' + ${article.atitle}" style="font-size: 18px;"></h2>
+        <hr style="border: 0 ;"> <!-- 这是分割线 -->
+        <p>文章内容：</p>
+        <p th:text="${article.content}" style="white-space: pre-line;"></p>
+        <hr style="border: 0 ;"> <!-- 这是分割线 -->
+        <p th:text="'分类：' + ${article.sort.sortname}"></p>
+        <p th:text="'发布者：' + ${article.user.username}"></p>
+        <a class="card-link" href="articleform.html" th:href="@{'/updateForm/' + ${article.aid}}">修改</a>
+        <a class="card-link" href="#" th:href="@{'/delete/' + ${article.aid}}">删除</a>
+    </div>
+    <hr style="border: 2px solid #ff0000;"> <!-- 这是分割线 -->
+    <div class="comment-list">
+        <h2 style="font-size: 18px;">评论列表</h2>
+        <ul>
+            <li th:each="articlecomment : ${article.articlecomments}">
+                <span th:text="${articlecomment.user.username}+':'"></span>
+                <span th:text="${articlecomment.articlecontent}"></span>
+                <a class="card-link" href="#" th:href="@{'/deletecomment/' + ${articlecomment.acid}}">删除</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 添加评论表单 -->
+    <div>
+        <h2 style="font-size: 18px;">添加评论</h2>
+        <form th:action="@{/articleshow/{id}/addArticlecomment(id=${article.aid})}" method="post">
+            <div class="form-group">
+                <label for="articlecomment">评论内容</label>
+                <textarea class="form-control" id="articlecomment" name="articlecontent" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">提交评论</button>
+        </form>
+    </div>
+</div>
+
+<div th:insert="~{layout::footer}"></div>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <title th:text="${title}">Layout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <style>
+        body {
+            background-image: url('/images/tiankong.png');
+            background-size: cover; /* 让背景图片覆盖整个页面 */
+            background-attachment: fixed; /* 背景图片固定，不随页面滚动 */
+        }
+        .custom-bg {
+            background-color: #adfcec; /* 使用十六进制颜色 */
+        }
+    </style>
+
+    <style>
+        .transparent-table {
+            background-color: rgba(255, 255, 255, 0); /* 设置白色背景色并且50%透明度 */
+        }
+
+        .transparent-table th, .transparent-table td {
+            background-color: rgba(255, 255, 255, 0.5); /* 设置单元格的背景色并且70%透明度 */
+        }
+    </style>
+
+    <style>
+        .container {
+            max-width: 800px;
+        }
+        .float-end {
+            float: right;
+        }
+        .comment-list {
+            margin-top: 30px;
+        }
+        .comment-list h2 {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-primary, .btn-secondary {
+            margin-right: 10px;
+        }
+
+        .image-container {
+            max-width: 800px; /* 设置图片容器的最大宽度 */
+            margin-bottom: 20px; /* 可选：添加一些底部间距 */
+            overflow: hidden; /* 隐藏溢出的部分 */
+        }
+
+        .fixed-width-image {
+            width: 100%; /* 让图片宽度填充其容器 */
+            height: auto; /* 保持宽高比 */
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+<div th:fragment="navbar" class="custom-bg">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/images/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                我的个人博客
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">文章</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/picture">图片</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/about">我的小屋</a></li>
+                </ul>
+                <hr/>
+                登录名：
+                <a th:href="@{/showuser}">
+                    <span sec:authentication="name"></span>
+                </a>
+                ／<a th:href="@{/toLogin}">登录</a>
+                ／<a th:href="@{/logout}">注销</a>
+                ／<a th:href="@{/showallusers}">用户管理</a>
+                <hr/>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div th:fragment="footer" class="container mt-4">
+    <hr style="border: 0 ;"> <!-- 这是分割线 -->
+    <div>联系我：a1609054035a@gmail.com</div>
+    <hr style="border: 0 ;"> <!-- 这是分割线 -->
+    <div>如果累了，可以播放音乐放松一下哦^_^</div>
+    <div id="songName" style="color: #ff5733;"></div>
+    <audio controls id="audioPlayer">
+        <source src="/audio/1.mp3" type="audio/mp3">
+        您的浏览器不支持音频元素。
+    </audio>
+    <div id="progressBarContainer">
+        <div id="progressBar"></div>
+    </div>
+    <button onclick="previousSong()">上一首</button>
+    <button onclick="nextSong()">下一首</button>
+
+    <script>
+        var playlist = [
+            {src: "/audio/1.mp3", name: "森永千才 - ミチノチモシーキミノキモチ (路上的猫尾草 你的心情)"},
+            {src: "/audio/2.mp3", name: "锦零 - 豆花之歌"},
+            {src: "/audio/3.mp3", name: "双笙 (陈元汐) - 心做し (心理作用)"},
+            {src: "/audio/4.mp3", name: "封茗囧菌 - 东京不太热"},
+            {src: "/audio/5.mp3", name: "封茗囧菌 - 写给我第一个喜欢的女孩的歌"},
+            {src: "/audio/6.mp3", name: "茅野愛衣、戸松遥、早見沙織 - secret base～君がくれたもの～ (secret base ~你给我的所有~)(10 years after Ver.)"},
+            {src: "/audio/7.mp3", name: "藤柒吖 - 坠 (温柔女声版)"}
+        ];
+        var currentSongIndex = 0;
+        var audioPlayer = document.getElementById('audioPlayer');
+        var songNameElement = document.getElementById('songName');
+
+        function playSong(index) {
+            audioPlayer.src = playlist[index].src;
+            audioPlayer.play();
+            currentSongIndex = index;
+            songNameElement.innerText = playlist[index].name;
+        }
+
+        function previousSong() {
+            currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+            playSong(currentSongIndex);
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            playSong(currentSongIndex);
+        }
+
+        // 添加事件监听器，当音频播放结束时，播放下一首
+        audioPlayer.addEventListener('ended', function() {
+            nextSong();
+        });
+
+        // 初始显示第一首歌曲的名称
+        songNameElement.innerText = playlist[currentSongIndex].name;
+    </script>
+
+</div>
+
+</body>
+</html>

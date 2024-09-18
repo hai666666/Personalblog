@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout::head(title=~{::title/text()})}">
+    <meta charset="UTF-8">
+    <title>更新用户</title>
+</head>
+<body>
+
+<div th:insert="~{layout::navbar}"></div>
+
+<div class="container">
+    <div class="clearfix"></div>
+
+    <!-- 提示消息 -->
+    <div th:if="${message}" class="alert alert-info" role="alert">
+        <span th:text="${message}"></span>
+    </div>
+
+    <form id="modifyuserform" th:action="@{/adminmodifyuser}" th:object="${user}" action="#" method="post">
+        <input type="hidden" th:field="*{uid}" th:class="${'form-control'}"/>
+        <div class="form-group">
+            <label for="username">用户名</label>
+            <input type="text" id="username" th:field="*{username}" class="form-control" required placeholder="请输入新的用户名"/>
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <textarea id="password" th:field="*{password}" class="form-control" required placeholder="请输入新的密码"></textarea>
+        </div>
+
+        <br/>
+        <button type="submit" class="btn btn-primary">提交</button>
+        <a class="btn btn-secondary btn-sm" href="javascript:history.back()">返回</a>
+    </form>
+</div> <!-- 内容区块结束 -->
+
+<div th:insert="~{layout::footer}"></div>
+
+</body>
+</html>
